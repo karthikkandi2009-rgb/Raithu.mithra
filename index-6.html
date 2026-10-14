@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#176b3a">
+  <title>Raithu Mithra | రైతు మిత్ర</title>
+  <style>
+    :root { --green:#176b3a; --green2:#218c4d; --light:#eef8ef; --ink:#183126; --muted:#617168; --card:#fff; --line:#dce9de; --orange:#ffb84d; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:system-ui,-apple-system,"Noto Sans Telugu",sans-serif; color:var(--ink); background:#f4f8f3; }
+    button, input, select, textarea { font:inherit; }
+    button { cursor:pointer; }
+    .topbar { position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:12px; padding:14px 16px; background:var(--green); color:#fff; box-shadow:0 2px 8px #0002; }
+    .brand-icon { width:42px; height:42px; border-radius:13px; display:grid; place-items:center; background:#ffffff22; font-size:25px; flex-shrink:0; }
+    .brand { flex:1; min-width:0; }
+    .brand h1 { font-size:18px; margin:0; line-height:1.3; }
+    .brand p { margin:2px 0 0; font-size:12px; opacity:.9; }
+    .back-btn { border:1px solid #ffffff66; background:#ffffff1c; color:#fff; border-radius:10px; padding:8px 11px; display:none; }
+    main { max-width:760px; margin:0 auto; padding:16px; }
+    .screen { display:none; animation:fade .18s ease; }
+    .screen.active { display:block; }
+    @keyframes fade { from {opacity:.4; transform:translateY(4px)} to {opacity:1; transform:translateY(0)} }
+    .hero { background:linear-gradient(135deg,#176b3a,#2e9a56); color:#fff; border-radius:20px; padding:22px; margin-bottom:18px; box-shadow:0 8px 24px #176b3a20; }
+    .hero .eyebrow { font-size:12px; opacity:.9; letter-spacing:.3px; }
+    .hero h2 { font-size:25px; line-height:1.3; margin:8px 0; }
+    .hero p { margin:0; line-height:1.7; font-size:14px; }
+    .section-title { margin:20px 0 12px; font-size:18px; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .service { min-height:125px; border:1px solid var(--line); background:#fff; border-radius:17px; padding:16px; text-align:left; color:var(--ink); box-shadow:0 3px 10px #163d1b08; transition:transform .15s,border-color .15s; }
+    .service:active { transform:scale(.98); }
+    .service .emoji { font-size:28px; display:block; margin-bottom:8px; }
+    .service strong { display:block; font-size:15px; }
+    .service small { display:block; margin-top:5px; line-height:1.4; color:var(--muted); }
+    .panel { background:var(--card); border:1px solid var(--line); border-radius:17px; padding:17px; margin-bottom:14px; box-shadow:0 3px 12px #163d1b08; }
+    .panel h3 { margin:0 0 10px; font-size:17px; }
+    .muted { color:var(--muted); font-size:13px; line-height:1.65; }
+    label { display:block; margin:12px 0 6px; font-weight:650; font-size:14px; }
+    input, select, textarea { width:100%; border:1px solid #cbdccf; border-radius:11px; padding:12px; background:#fff; color:var(--ink); outline:none; }
+    input:focus, select:focus, textarea:focus { border-color:var(--green2); box-shadow:0 0 0 3px #218c4d18; }
+    textarea { resize:vertical; min-height:100px; }
+    .btn { border:0; border-radius:11px; background:var(--green); color:#fff; padding:12px 15px; font-weight:700; margin-top:12px; width:100%; }
+    .btn.secondary { background:#e7f4e9; color:var(--green); border:1px solid #cfe6d3; }
+    .btn:disabled { opacity:.6; cursor:wait; }
+    .result { margin-top:14px; padding:14px; border-radius:12px; background:#eff8ef; border:1px solid #d3e8d5; line-height:1.7; overflow-wrap:anywhere; }
+    .result.error { background:#fff4ed; border-color:#f3d3bf; }
+    .weather-big { font-size:36px; font-weight:800; margin:5px 0; }
+    .weather-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:14px; }
+    .weather-stat { background:#f5faf5; border:1px solid var(--line); border-radius:12px; padding:12px; }
+    .weather-stat span { display:block; color:var(--muted); font-size:12px; }
+    .weather-stat strong { display:block; margin-top:4px; font-size:17px; }
+    .info-list { padding-left:20px; line-height:1.8; }
+    .pill { display:inline-block; background:#e7f4e9; color:var(--green); border-radius:20px; padding:4px 9px; font-size:12px; font-weight:700; }
+    .footer { text-align:center; color:var(--muted); font-size:12px; padding:20px 8px 28px; }
+    .hidden { display:none !important; }
+    @media (min-width:560px) { .grid { grid-template-columns:repeat(3,minmax(0,1fr)); } .hero h2 {font-size:29px;} }
+    @media (max-width:360px) { main {padding:11px;} .grid {gap:8px;} .service {padding:12px; min-height:120px;} .hero {padding:17px;} }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-icon" aria-hidden="true">🌾</div>
+    <div class="brand">
+      <h1>రైతు మిత్ర</h1>
+      <p>Raithu Mithra · మీ వ్యవసాయ సహాయకుడు</p>
+    </div>
+    <button id="backButton" class="back-btn" type="button" onclick="showScreen('home')">← వెనుకకు</button>
+  </header>
+
+  <main>
+    <section id="home" class="screen active">
+      <div class="hero">
+        <div class="eyebrow">🌱 స్మార్ట్ వ్యవసాయ సహాయకుడు</div>
+        <h2>రైతు మిత్రకు స్వాగతం!</h2>
+        <p>వాతావరణం, పంటల సమాచారం, మార్కెట్ ధరలు మరియు వ్యవసాయ మార్గదర్శకాలను ఒకేచోట తెలుసుకోండి.</p>
+      </div>
+      <h2 class="section-title">మీకు ఏ సేవ కావాలి?</h2>
+      <div class="grid">
+        <button class="service" type="button" onclick="showScreen('weather')"><span class="emoji">🌦️</span><strong>వాతావరణం</strong><small>తెలంగాణ జిల్లాల వాతావరణం</small></button>
+        <button class="service" type="button" onclick="showScreen('crops')"><span class="emoji">🌿</span><strong>పంటల సమాచారం</strong><small>పంటల సాధారణ సాగు సూచనలు</small></button>
+        <button class="service" type="button" onclick="showScreen('prices')"><span class="emoji">💹</span><strong>మార్కెట్ ధరలు</strong><small>ధరలు ఎలా తెలుసుకోవాలి</small></button>
+        <button class="service" type="button" onclick="showScreen('schemes')"><span class="emoji">🏛️</span><strong>ప్రభుత్వ పథకాలు</strong><small>పథకాల సమాచారం, ధృవీకరణ</small></button>
+        <button class="service" type="button" onclick="showScreen('doctor')"><span class="emoji">🩺</span><strong>పంట సమస్య సహాయం</strong><small>ప్రాథమిక మార్గదర్శకం</small></button>
+        <button class="service" type="button" onclick="showScreen('voice')"><span class="emoji">🎙️</span><strong>తెలుగు వాయిస్</strong><small>మాట్లాడి ప్రశ్నను టైప్ చేయండి</small></button>
+      </div>
+      <div class="footer">రైతు మిత్ర · ఉపయోగకరమైన వ్యవసాయ సమాచారం</div>
+    </section>
+
+    <section id="weather" class="screen">
+      <h2 class="section-title">🌦️ జిల్లా వాతావరణం</h2>
+      <div class="panel">
+        <p class="muted">తెలంగాణ జిల్లాను ఎంచుకుని ప్రస్తుత వాతావరణ వివరాలు చూడండి. ఇంటర్నెట్ అవసరం. ఇవి జిల్లా కేంద్రానికి సమీప అంచనా మాత్రమే; మీ పొలంలోని పరిస్థితులు మారవచ్చు.</p>
+        <label for="districtSelect">జిల్లా ఎంచుకోండి</label>
+        <select id="districtSelect">
+          <option value="Hyderabad">Hyderabad (హైదరాబాద్)</option>
+          <option value="Adilabad">Adilabad (ఆదిలాబాద్)</option>
+          <option value="Bhadradri Kothagudem">Bhadradri Kothagudem (భద్రాద్రి కొత్తగూడెం)</option>
+          <option value="Hanumakonda">Hanumakonda (హనుమకొండ)</option>
+          <option value="Jagtial">Jagtial (జగిత్యాల)</option>
+          <option value="Jangaon">Jangaon (జనగామ)</option>
+          <option value="Jayashankar Bhupalpally">Jayashankar Bhupalpally (జయశంకర్ భూపాలపల్లి)</option>
+          <option value="Jogulamba Gadwal">Jogulamba Gadwal (జోగులాంబ గద్వాల)</option>
+          <option value="Kamareddy">Kamareddy (కామారెడ్డి)</option>
+          <option value="Karimnagar">Karimnagar (కరీంనగర్)</option>
+          <option value="Khammam">Khammam (ఖమ్మం)</option>
+          <option value="Komaram Bheem Asifabad">Komaram Bheem Asifabad (కొమరం భీమ్ ఆసిఫాబాద్)</option>
+          <option value="Mahabubabad">Mahabubabad (మహబూబాబాద్)</option>
+          <option value="Mahabubnagar">Mahabubnagar (మహబూబ్‌నగర్)</option>
+          <option value="Mancherial">Mancherial (మంచిర్యాల)</option>
+          <option value="Medak">Medak (మెదక్)</option>
+          <option value="Medchal Malkajgiri">Medchal Malkajgiri (మేడ్చల్ మల్కాజిగిరి)</option>
+          <option value="Mulugu">Mulugu (ములుగు)</option>
+          <option value="Nagarkurnool">Nagarkurnool (నాగర్‌కర్నూల్)</option>
+          <option value="Nalgonda">Nalgonda (నల్గొండ)</option>
+          <option value="Narayanpet">Narayanpet (నారాయణపేట్)</option>
+          <option value="Nirmal">Nirmal (నిర్మల్)</option>
+          <option value="Nizamabad">Nizamabad (నిజామాబాద్)</option>
+          <option value="Peddapalli">Peddapalli (పెద్దపల్లి)</option>
+          <option value="Rajanna Sircilla">Rajanna Sircilla (రాజన్న సిరిసిల్ల)</option>
+          <option value="Rangareddy">Rangareddy (రంగారెడ్డి)</option>
+          <option value="Sangareddy">Sangareddy (సంగారెడ్డి)</option>
+          <option value="Siddipet">Siddipet (సిద్దిపేట)</option>
+          <option value="Suryapet">Suryapet (సూర్యాపేట)</option>
+          <option value="Vikarabad">Vikarabad (వికారాబాద్)</option>
+          <option value="Wanaparthy">Wanaparthy (వనపర్తి)</option>
+          <option value="Warangal">Warangal (వరంగల్)</option>
+          <option value="Yadadri Bhuvanagiri">Yadadri Bhuvanagiri (యాదాద్రి భువనగిరి)</option>
+        </select>
+        <button class="btn" id="weatherButton" type="button" onclick="loadWeather()">వాతావరణం చూడండి</button>
+        <div id="weatherResult" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="crops" class="screen">
+      <h2 class="section-title">🌿 పూర్తి పంటల సమాచారం</h2>
+      <div class="panel">
+        <p class="muted">పంటను ఎంచుకుంటే విత్తే సమయం, నేల, నీరు, పోషకాలు, కలుపు/తెగుళ్ల పర్యవేక్షణ, కోత వంటి అంశాలపై సాధారణ సమాచారం కనిపిస్తుంది. ఖచ్చితమైన మోతాదులు నేల పరీక్ష, పంట రకం, ప్రాంతం, సీజన్‌ను బట్టి మారుతాయి.</p>
+        <label for="cropSelect">పంట ఎంచుకోండి</label>
+        <select id="cropSelect">
+          <option value="paddy">వరి</option><option value="cotton">పత్తి</option><option value="maize">మొక్కజొన్న</option><option value="chilli">మిరప</option><option value="turmeric">పసుపు</option><option value="redgram">కందులు</option><option value="soybean">సోయాబీన్</option><option value="vegetables">కూరగాయలు</option>
+        </select>
+        <button class="btn" type="button" onclick="showCropInfo()">పూర్తి సమాచారం చూపించు</button>
+        <div id="cropResult" class="result">పంటను ఎంచుకుని బటన్ నొక్కండి.</div>
+      </div>
+    </section>
+
+    <section id="prices" class="screen">
+      <h2 class="section-title">💹 మార్కెట్ ధరలు</h2>
+      <div class="panel">
+        <p class="muted">ధరలు ఈ స్క్రీన్‌లోనే చూపించాలనే మీ కోరికను దృష్టిలో ఉంచుకున్నాం. కానీ ఈ ఫైల్‌లో ప్రస్తుతం అధికారిక లైవ్ ధరల API కనెక్ట్ కాలేదు; తప్పు ధరలు చూపకుండా నిజమైన ధరలు అందుబాటులో లేవని స్పష్టంగా చూపిస్తాం.</p>
+        <label for="priceCrop">పంట</label>
+        <select id="priceCrop">
+          <option value="paddy">వరి</option><option value="cotton">పత్తి</option><option value="maize">మొక్కజొన్న</option><option value="chilli">మిరప</option><option value="turmeric">పసుపు</option><option value="redgram">కందులు</option><option value="soybean">సోయాబీన్</option>
+        </select>
+        <label for="priceDistrict">జిల్లా</label>
+        <select id="priceDistrict">
+          <option>సిద్దిపేట</option><option>కరీంనగర్</option><option>వరంగల్</option><option>నిజామాబాద్</option><option>ఖమ్మం</option><option>నల్గొండ</option><option>మెదక్</option><option>ఆదిలాబాద్</option><option>మహబూబ్‌నగర్</option><option>హైదరాబాద్</option><option>ఇతర జిల్లా</option>
+        </select>
+        <button class="btn" type="button" onclick="showPriceInfo()">ధరల సమాచారం చూపించు</button>
+        <div id="priceResult" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="schemes" class="screen">
+      <h2 class="section-title">🏛️ ప్రభుత్వ పథకాలు</h2>
+      <div class="panel">
+        <p>రైతులకు సంబంధించిన పథకాల అర్హత, దరఖాస్తు తేదీలు, లబ్ధి మొత్తం మారవచ్చు. ఈ యాప్‌లో ప్రస్తుతం లైవ్ పథక డేటాబేస్ లేదు.</p>
+        <ul class="info-list">
+          <li><strong>PM-KISAN:</strong> అర్హత మరియు చెల్లింపు స్థితిని అధికారిక పోర్టల్‌లో పరిశీలించండి.</li>
+          <li><strong>పంట బీమా:</strong> మీ పంట, ప్రాంతం, సీజన్‌కు వర్తించే పథకం ఉందో అధికారులను అడగండి.</li>
+          <li><strong>రాష్ట్ర వ్యవసాయ పథకాలు:</strong> మండల వ్యవసాయ అధికారి లేదా రైతు వేదికను సంప్రదించండి.</li>
+        </ul>
+        <p class="muted">గమనిక: ఇక్కడ ప్రస్తుతం పథకాల లైవ్ డేటాబేస్ కనెక్ట్ కాలేదు. దరఖాస్తు/చెల్లింపు వివరాల కోసం మండల వ్యవసాయ కార్యాలయం లేదా అధికారిక ప్రభుత్వ సేవా కేంద్రాన్ని సంప్రదించండి.</p>
+      </div>
+    </section>
+
+    <section id="doctor" class="screen">
+      <h2 class="section-title">🩺 పంట సమస్య సహాయం</h2>
+      <div class="panel">
+        <p class="muted">పంట, దశ, లక్షణాలు వివరించండి. ఈ వెర్షన్‌లో నిజమైన AI లేదా ఫోటో నిర్ధారణ లేదు; అందువల్ల లక్షణాల ఆధారంగా ఖచ్చితమైన వ్యాధి పేరు చెప్పదు. సురక్షితమైన ప్రాథమిక సూచనలు మాత్రమే ఇస్తుంది.</p>
+        <label for="doctorCrop">పంట</label>
+        <select id="doctorCrop"><option>వరి</option><option>పత్తి</option><option>మొక్కజొన్న</option><option>మిరప</option><option>పసుపు</option><option>కందులు</option><option>సోయాబీన్</option><option>కూరగాయలు</option><option>ఇతర పంట</option></select>
+        <label for="doctorStage">పంట దశ</label>
+        <select id="doctorStage"><option>మొలక దశ</option><option>ఆకులు/పెరుగుదల దశ</option><option>పుష్పించే దశ</option><option>కాయ/గింజ దశ</option><option>కోతకు దగ్గర</option></select>
+        <label for="cropProblem">లక్షణాలు, ఎప్పటి నుంచి, ఎంత విస్తీర్ణంలో కనిపిస్తున్నాయో రాయండి</label>
+        <textarea id="cropProblem" placeholder="ఉదా: పత్తి ఆకులపై పసుపు మచ్చలు 4 రోజులుగా ఉన్నాయి; సుమారు 10 మొక్కల్లో కనిపిస్తున్నాయి..."></textarea>
+        <button class="btn" type="button" onclick="getCropGuidance()">వివరమైన ప్రాథమిక మార్గదర్శకం</button>
+        <div id="doctorResult" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="voice" class="screen">
+      <h2 class="section-title">🎙️ తెలుగు వాయిస్ అసిస్టెంట్</h2>
+      <div class="panel">
+        <p class="muted">మైక్రోఫోన్ అనుమతి ఇవ్వాలి. బ్రౌజర్ మరియు ఇంటర్నెట్‌పై ఆధారపడి వాయిస్ గుర్తింపు పని చేస్తుంది. ఇది మీ మాటలను టెక్స్ట్‌గా మార్చుతుంది; స్వయంగా AI సమాధానాలు ఇవ్వదు.</p>
+        <button id="voiceButton" class="btn" type="button" onclick="startVoice()">🎙️ మాట్లాడటం ప్రారంభించండి</button>
+        <label for="voiceText">గుర్తించిన మాటలు</label>
+        <textarea id="voiceText" placeholder="మీరు మాట్లాడిన మాటలు ఇక్కడ కనిపిస్తాయి..."></textarea>
+        <div id="voiceStatus" class="muted" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    "use strict";
+
+    const districtCoords = {
+      "Hyderabad":[17.385,78.4867],"Adilabad":[19.6641,78.532],"Bhadradri Kothagudem":[17.556,80.619],"Hanumakonda":[17.996,79.559],"Jagtial":[18.794,78.916],"Jangaon":[17.726,79.152],"Jayashankar Bhupalpally":[18.433,79.867],"Jogulamba Gadwal":[16.23,77.8],"Kamareddy":[18.32,78.335],"Karimnagar":[18.4386,79.1288],"Khammam":[17.2473,80.1514],"Komaram Bheem Asifabad":[19.36,79.28],"Mahabubabad":[17.597,80.006],"Mahabubnagar":[16.737,78.009],"Mancherial":[18.8714,79.4443],"Medak":[18.045,78.26],"Medchal Malkajgiri":[17.63,78.48],"Mulugu":[18.19,79.93],"Nagarkurnool":[16.482,78.324],"Nalgonda":[17.0575,79.269],"Narayanpet":[16.747,77.495],"Nirmal":[19.096,78.344],"Nizamabad":[18.6725,78.0941],"Peddapalli":[18.613,79.374],"Rajanna Sircilla":[18.388,78.81],"Rangareddy":[17.3,78.2],"Sangareddy":[17.624,78.086],"Siddipet":[18.1018,78.852],"Suryapet":[17.14,79.62],"Vikarabad":[17.338,77.904],"Wanaparthy":[16.367,78.068],"Warangal":[17.9689,79.5941],"Yadadri Bhuvanagiri":[17.515,78.886]
+    };
+
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(function(screen) {
+        screen.classList.toggle("active", screen.id === id);
+      });
+      document.getElementById("backButton").style.display = id === "home" ? "none" : "inline-block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function weatherDescription(code) {
+      if (code === 0) return "ఆకాశం నిర్మలంగా ఉంది";
+      if ([1,2,3].includes(code)) return "పాక్షికంగా మేఘావృతం / మేఘావృతం";
+      if ([45,48].includes(code)) return "పొగమంచు";
+      if ([51,53,55,56,57].includes(code)) return "తేలికపాటి చినుకులు";
+      if ([61,63,65,66,67,80,81,82].includes(code)) return "వర్షం";
+      if ([71,73,75,77,85,86].includes(code)) return "మంచు పడే పరిస్థితి";
+      if ([95,96,99].includes(code)) return "ఉరుములతో కూడిన వర్షం";
+      return "వాతావరణ వివరాలు అందుబాటులో ఉన్నాయి";
+    }
+
+    async function loadWeather() {
+      const district = document.getElementById("districtSelect").value;
+      const result = document.getElementById("weatherResult");
+      const button = document.getElementById("weatherButton");
+      const coords = districtCoords[district];
+      if (!coords) {
+        result.innerHTML = '<div class="result error">ఈ జిల్లాకు స్థాన సమాచారం అందుబాటులో లేదు.</div>';
+        return;
+      }
+      button.disabled = true;
+      button.textContent = "లోడ్ అవుతోంది...";
+      result.innerHTML = '<div class="result">తాజా వాతావరణ సమాచారం తెస్తున్నాం. దయచేసి వేచి ఉండండి...</div>';
+      try {
+        const url = "https://api.open-meteo.com/v1/forecast?latitude=" + coords[0] +
+          "&longitude=" + coords[1] +
+          "&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&timezone=Asia%2FKolkata";
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("వాతావరణ సేవ స్పందించలేదు.");
+        const data = await response.json();
+        if (!data.current) throw new Error("వాతావరణ వివరాలు అందలేదు.");
+        const c = data.current;
+        const time = String(c.time || "").replace("T", " ");
+        result.innerHTML =
+          '<div class="result"><span class="pill">' + escapeHTML(district) + '</span>' +
+          '<div class="weather-big">' + Math.round(Number(c.temperature_2m)) + '°C</div>' +
+          '<strong>' + weatherDescription(Number(c.weather_code)) + '</strong>' +
+          '<div class="muted">చివరి నవీకరణ: ' + escapeHTML(time) + ' (భారత కాలమానం)</div>' +
+          '<div class="weather-grid">' +
+          weatherStat("అనుభూతి ఉష్ణోగ్రత", numberText(c.apparent_temperature, "°C")) +
+          weatherStat("తేమ", numberText(c.relative_humidity_2m, "%")) +
+          weatherStat("వర్షపాతం", numberText(c.precipitation, " mm")) +
+          weatherStat("గాలి వేగం", numberText(c.wind_speed_10m, " km/h")) +
+          '</div><p class="muted">ఇది జిల్లా కేంద్రానికి సమీప అంచనా. వ్యవసాయ నిర్ణయాలకు స్థానిక వాతావరణ హెచ్చరికలు కూడా పరిశీలించండి.</p></div>';
+      } catch (error) {
+        result.innerHTML = '<div class="result error">వాతావరణం పొందలేకపోయాం. ఇంటర్నెట్ కనెక్షన్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి. ' + escapeHTML(error.message || "") + '</div>';
+      } finally {
+        button.disabled = false;
+        button.textContent = "వాతావరణం చూడండి";
+      }
+    }
+
+    function weatherStat(label, value) {
+      return '<div class="weather-stat"><span>' + escapeHTML(label) + '</span><strong>' + escapeHTML(value) + '</strong></div>';
+    }
+
+    function numberText(value, suffix) {
+      const n = Number(value);
+      return Number.isFinite(n) ? (Math.round(n * 10) / 10) + suffix : "లభ్యం కాదు";
+    }
+
+    function showCropInfo() {
+      const crop = document.getElementById("cropSelect").value;
+      const data = {
+        paddy: {
+          name:"వరి", season:"తెలంగాణలో సాధారణంగా ఖరీఫ్, రబీ సీజన్లలో సాగు చేస్తారు; స్థానిక వర్షపాతం, నీటి లభ్యతను బట్టి విత్తే సమయం మారుతుంది.",
+          soil:"నీరు నిల్వ ఉండగల సారవంతమైన నేల అనుకూలం. పొలంలో నీరు బయటకు వెళ్లే మార్గం ఉండాలి.",
+          sowing:"ప్రాంతీయ వ్యవసాయ శాఖ సిఫార్సు చేసిన విత్తన రకం, నారు/నేరుగా విత్తే పద్ధతిని ఎంచుకోండి. విత్తన శుద్ధి అవసరమా అని అధికారిని అడగండి.",
+          water:"పంట దశను బట్టి నీటి అవసరం మారుతుంది. పొలాన్ని ఎప్పుడూ లోతుగా నీటితో నింపి ఉంచాల్సిన అవసరం ఉందో లేదో స్థానిక సిఫార్సు తెలుసుకోండి; నీరు వృథా కాకుండా చూడండి.",
+          nutrients:"నేల పరీక్ష ఆధారంగా ఎరువుల ప్రణాళిక చేయండి. నత్రజని ఎరువులను ఒకేసారి కాకుండా సిఫార్సు చేసిన దశల్లో ఇవ్వడం గురించి అధికారిని సంప్రదించండి.",
+          weeds:"మొదటి వారాల్లో కలుపును నియంత్రించండి. కలుపుమందు వాడే ముందు వరి పద్ధతి, పంట దశకు అనుమతించబడిందో లేబుల్‌పై చూడండి.",
+          pests:"కాండం తొలిచే పురుగు, ఆకుముడత, బ్యాక్టీరియా/శిలీంధ్ర లక్షణాలను పరిశీలించండి. లక్షణం గుర్తించిన తర్వాతే సిఫార్సు చేసిన చర్య తీసుకోండి.",
+          harvest:"గింజలు పరిపక్వం అయినప్పుడు, పొల పరిస్థితులకు అనుగుణంగా కోత చేయండి. కోత తర్వాత ధాన్యాన్ని బాగా ఆరబెట్టి పొడిగా, శుభ్రమైన ప్రదేశంలో నిల్వ చేయండి."
+        },
+        cotton: {
+          name:"పత్తి", season:"వర్షాకాలం ప్రారంభం, నేలలో తగిన తేమ మరియు ప్రాంతీయ సిఫార్సు ఆధారంగా విత్తే సమయాన్ని నిర్ణయించండి.",
+          soil:"నీరు నిలిచిపోని లోతైన, మంచి నీరు పారుదల గల నేల అనుకూలం.",
+          sowing:"ధృవీకరించిన విత్తనాలు, స్థానికంగా సిఫార్సు చేసిన రకాన్ని ఎంచుకోండి. మొక్కల మధ్య దూరం రకం మరియు సాగు పద్ధతిపై ఆధారపడుతుంది.",
+          water:"మొలక, పుష్పించే మరియు కాయ ఏర్పడే దశల్లో నేల తేమను గమనించండి. అధిక నీరు నిల్వ ఉండనివ్వకండి.",
+          nutrients:"నేల పరీక్ష చేయించి ఎరువులు వేయండి. అధిక నత్రజని వల్ల అనవసరమైన ఆకుల పెరుగుదల రావచ్చు; మోతాదు స్థానిక సిఫార్సు ప్రకారం ఉండాలి.",
+          weeds:"ప్రారంభ దశలో కలుపు పోటీ తగ్గించండి. పత్తికి అనుమతించిన పద్ధతులు మాత్రమే వాడండి.",
+          pests:"పింక్ బోల్‌వార్మ్, తెల్లదోమ, త్రిప్స్ వంటి పురుగుల కోసం వారానికి కనీసం ఒకసారి పంటను పరిశీలించండి. అవసరం నిర్ధారించకుండా మందు పిచికారీ చేయవద్దు.",
+          harvest:"పూర్తిగా తెరచిన బొండాల నుంచి పొడి పత్తిని శుభ్రమైన చేతులతో సేకరించండి. తడి పత్తిని నిల్వ చేయవద్దు."
+        },
+        maize: {
+          name:"మొక్కజొన్న", season:"ఖరీఫ్ లేదా రబీ సాగు స్థానిక వాతావరణం, నీటి వనరులు, సిఫార్సు చేసిన రకంపై ఆధారపడి ఉంటుంది.",
+          soil:"మంచి నీరు పారుదల ఉన్న లోతైన నేల అనుకూలం; నీరు నిలిచిపోవడం వేర్లకు హాని కలిగించవచ్చు.",
+          sowing:"నాణ్యమైన విత్తనాలు వాడి సరైన లోతు, మొక్కల దూరం పాటించండి. విత్తే సమయాన్ని స్థానిక సిఫార్సు ప్రకారం ఎంచుకోండి.",
+          water:"పుష్పించే దశ, గింజ నింపే దశల్లో నీటి ఒత్తిడిని నివారించండి. నీటి అవసరం నేల, వాతావరణాన్ని బట్టి మారుతుంది.",
+          nutrients:"నేల పరీక్ష ఆధారంగా ఎరువులు వేయండి. అవసరమైతే పోషకాలను పంట దశల వారీగా ఇవ్వడానికి వ్యవసాయ అధికారిని అడగండి.",
+          weeds:"ప్రారంభ పెరుగుదల దశలో కలుపు నియంత్రణ ముఖ్యం. పంటకు అనుకూలమైన పద్ధతిని ఎంచుకోండి.",
+          pests:"ఫాల్ ఆర్మీవార్మ్ సహా ఆకులు/కాండంపై పురుగుల లక్షణాలను పరిశీలించండి. పురుగు గుర్తింపు లేకుండా పురుగుమందు వాడకండి.",
+          harvest:"కంకులు పరిపక్వం అయ్యాక కోత చేసి గింజలను సురక్షిత తేమ స్థాయికి ఆరబెట్టి నిల్వ చేయండి."
+        },
+        chilli: {
+          name:"మిరప", season:"నారు నాటే సమయం ప్రాంతం, రకం, నీటి సౌకర్యం మరియు సీజన్‌ను బట్టి మారుతుంది.",
+          soil:"సారవంతమైన, నీరు బాగా పారే నేల అనుకూలం. నీరు నిలిచే పొలాల్లో వేర్ల సమస్యలు పెరగవచ్చు.",
+          sowing:"ఆరోగ్యకరమైన నారు, ధృవీకరించిన విత్తనాలు వాడండి. నారు నాటే ముందు వ్యాధి లక్షణాలు ఉన్న మొక్కలను తొలగించండి.",
+          water:"మట్టిలో సమతుల్య తేమ ఉండేలా చూడండి. ఎక్కువ నీరు లేదా దీర్ఘకాలం ఎండిపోవడం రెండూ పంటను ప్రభావితం చేస్తాయి.",
+          nutrients:"నేల పరీక్ష, పంట రకం ఆధారంగా ఎరువులు నిర్ణయించండి. ఆకుల రంగు ఒక్కటే చూసి అధిక ఎరువు వేయవద్దు.",
+          weeds:"కలుపును చిన్న దశలోనే నియంత్రించండి; మొక్కల వేర్లకు నష్టం కలగకుండా జాగ్రత్తపడండి.",
+          pests:"త్రిప్స్, మైట్స్, ఆఫిడ్స్, ఆకుముడత/మచ్చల లక్షణాలు పరిశీలించండి. వైరస్ లక్షణాలున్న మొక్కలపై నిపుణుల సలహా తీసుకోండి.",
+          harvest:"కాయలు రకం, మార్కెట్ అవసరానికి అనుగుణంగా పండినప్పుడు కోయండి. ఎండబెట్టే మిరపను శుభ్రమైన ఉపరితలంపై ఆరబెట్టండి."
+        },
+        turmeric: {
+          name:"పసుపు", season:"విత్తే సమయం స్థానిక వర్షాలు, నేల తేమ మరియు ప్రాంతీయ సిఫార్సులపై ఆధారపడి ఉంటుంది.",
+          soil:"సేంద్రియ పదార్థం ఉన్న, నీరు బాగా పారే నేల మంచిది. నీరు నిలిచిపోవడం దుంప కుళ్లుకు దారి తీస్తుంది.",
+          sowing:"ఆరోగ్యకరమైన, వ్యాధి లక్షణాలు లేని విత్తన దుంపలను ఎంచుకోండి. నాటే పద్ధతిపై స్థానిక సిఫార్సు అనుసరించండి.",
+          water:"నేల తేమ నిల్వ ఉండేలా నీరు ఇవ్వండి; అతిగా నీరు పెట్టి నిల్వ చేయవద్దు.",
+          nutrients:"పశువుల ఎరువు/కంపోస్ట్ మరియు ఇతర ఎరువుల మోతాదును నేల పరీక్ష, అధికారిక సిఫార్సు ఆధారంగా నిర్ణయించండి.",
+          weeds:"మొదటి నెలల్లో కలుపు నియంత్రణ, నేలపై మల్చింగ్ అవసరాన్ని స్థానిక సలహాతో నిర్ణయించండి.",
+          pests:"ఆకుల మచ్చలు, వాడిపోవడం, దుంప కుళ్లు లక్షణాలు పరిశీలించండి. అనారోగ్య మొక్కల నుంచి దుంపలను విత్తనంగా వాడవద్దు.",
+          harvest:"ఆకులు ఎండిపోవడం మరియు పంట పరిపక్వతను బట్టి కోత చేయండి. శుభ్రపరచడం, ఉడికించడం/ఎండబెట్టడం వంటి ప్రక్రియలను సిఫార్సు ప్రకారం నిర్వహించండి."
+        },
+        redgram: {
+          name:"కందులు", season:"వర్షాకాలంలో విత్తే సమయం స్థానిక వర్షపాతం, నేల రకం, రకం ఆధారంగా నిర్ణయించాలి.",
+          soil:"నీరు నిల్వ ఉండని, మంచి నీరు పారే నేల అనుకూలం.",
+          sowing:"ప్రాంతానికి సరిపోయే రకం, సరైన మొక్కల దూరం ఎంచుకోండి. విత్తన శుద్ధి లేదా జీవ ఎరువుల వినియోగం గురించి అధికారిని అడగండి.",
+          water:"సాధారణంగా నీరు నిలిచిపోవడం హానికరం; దీర్ఘకాలిక ఎండలో పంట దశను బట్టి నీటి అవసరాన్ని పరిశీలించండి.",
+          nutrients:"నేల పరీక్ష ఆధారంగా పోషకాలు నిర్ణయించండి. పప్పుధాన్యాలకు సిఫార్సు చేసిన జీవ ఎరువుల గురించి స్థానిక సలహా పొందండి.",
+          weeds:"మొదటి దశలో కలుపు నియంత్రణ చేయండి. మొక్కలు పెరిగిన తర్వాత వేర్లకు హాని కలగకుండా జాగ్రత్తపడండి.",
+          pests:"పుష్పాలు, కాయలపై పురుగులు, విల్ట్/వేర్ల వ్యాధి లక్షణాలు పరిశీలించండి.",
+          harvest:"కాయలు పరిపక్వం అయినప్పుడు కోత చేయండి. నిల్వకు ముందు గింజలను బాగా ఆరబెట్టి తేమ, పురుగుల నుంచి రక్షించండి."
+        },
+        soybean: {
+          name:"సోయాబీన్", season:"వర్షాకాలం ప్రారంభంలో తగిన నేల తేమ ఉన్నప్పుడు విత్తే సమయం స్థానిక సిఫార్సుపై ఆధారపడుతుంది.",
+          soil:"మంచి నీరు పారే నేల అనుకూలం; నీరు నిలిచిపోవడం మొలకలు, వేర్లకు హాని కలిగించవచ్చు.",
+          sowing:"ధృవీకరించిన విత్తనాలు, ప్రాంతానికి అనుకూలమైన రకాన్ని ఎంచుకోండి. విత్తన శుద్ధి గురించి వ్యవసాయ అధికారిని అడగండి.",
+          water:"మొలక, పుష్పించే మరియు గింజ నింపే దశల్లో నేల తేమను గమనించండి.",
+          nutrients:"నేల పరీక్ష ఆధారంగా ఎరువులు వాడండి; సిఫార్సు చేసిన జీవ ఎరువుల వినియోగం గురించి సలహా పొందండి.",
+          weeds:"మొదటి వారాల్లో కలుపు పోటీ తగ్గించడం దిగుబడికి సహాయపడుతుంది.",
+          pests:"ఆకులు తినే పురుగులు, కాండం/కాయల నష్టం, ఆకుల మచ్చలను పరిశీలించండి. కారణం నిర్ధారించి మాత్రమే చర్య తీసుకోండి.",
+          harvest:"ఆకులు పసుపు రంగులోకి మారి కాయలు పరిపక్వం అయినప్పుడు కోత చేయండి. గింజలను సురక్షితంగా ఆరబెట్టి నిల్వ చేయండి."
+        },
+        vegetables: {
+          name:"కూరగాయలు", season:"టమాటా, వంకాయ, బెండ, దోస వంటి పంటలకు సీజన్, రకం, స్థానిక ఉష్ణోగ్రత ఆధారంగా నాటే సమయం మారుతుంది.",
+          soil:"సారవంతమైన, సేంద్రియ పదార్థం ఉన్న, నీరు బాగా పారే నేల అనుకూలం.",
+          sowing:"ఆరోగ్యకరమైన నారు/విత్తనాలు ఎంచుకోండి. ప్రతి కూరగాయకు సిఫార్సు చేసిన దూరం వేరు.",
+          water:"చిన్న మోతాదుల్లో సమతుల్య నీటి నిర్వహణ చేయండి; ఆకులపై ఎక్కువసేపు తేమ ఉండకుండా అవసరమైన జాగ్రత్తలు తీసుకోండి.",
+          nutrients:"నేల పరీక్ష, పంట రకం, పెరుగుదల దశ ఆధారంగా ఎరువులు నిర్ణయించండి.",
+          weeds:"కలుపును చిన్న దశలో తొలగించండి; వేర్లకు హాని చేయకుండా మల్చింగ్ ఉపయోగాన్ని పరిశీలించండి.",
+          pests:"ఆకులు, పూలు, కాయలపై పురుగులు, మచ్చలు, కుళ్లు లక్షణాలు తరచూ పరిశీలించండి. పంటకు అనుమతించిన మందులనే లేబుల్ ప్రకారం వాడండి.",
+          harvest:"కూరగాయ జాతి, పరిమాణం, మార్కెట్ అవసరానికి అనుగుణంగా కోయండి. శుభ్రమైన పెట్టెల్లో ఉంచి వేడి, గాయాల నుంచి రక్షించండి."
+        }
+      };
+      const item = data[crop];
+      const fields = [
+        ["సీజన్ / విత్తే సమయం", item.season], ["నేల ఎంపిక", item.soil],
+        ["విత్తనాలు / నాటడం", item.sowing], ["నీటి నిర్వహణ", item.water],
+        ["ఎరువులు / పోషకాలు", item.nutrients], ["కలుపు నియంత్రణ", item.weeds],
+        ["తెగుళ్లు / పురుగుల పర్యవేక్షణ", item.pests], ["కోత / నిల్వ", item.harvest]
+      ];
+      document.getElementById("cropResult").innerHTML =
+        "<h3>" + escapeHTML(item.name) + " — పూర్తి సాధారణ మార్గదర్శకం</h3>" +
+        fields.map(function(field) { return "<p><strong>" + escapeHTML(field[0]) + "</strong><br>" + escapeHTML(field[1]) + "</p>"; }).join("") +
+        "<p><strong>ముఖ్య గమనిక:</strong> విత్తనాల మోతాదు, ఎరువుల మోతాదు, మందుల పేర్లు/మోతాదులు ఈ సాధారణ పేజీ నుంచి నిర్ణయించవద్దు. నేల పరీక్ష మరియు మీ మండల వ్యవసాయ అధికారుల సిఫార్సు తీసుకోండి.</p>";
+    }
+
+    function showPriceInfo() {
+      const cropName = document.getElementById("priceCrop").selectedOptions[0].text;
+      const district = document.getElementById("priceDistrict").value;
+      document.getElementById("priceResult").innerHTML =
+        '<div class="result"><strong>' + escapeHTML(cropName) + ' — ' + escapeHTML(district) + '</strong>' +
+        '<p>ఈ యాప్‌లో ప్రత్యక్ష అధికారిక మార్కెట్ ధరల డేటా కనెక్ట్ కాలేదు. కాబట్టి నమ్మదగని లేదా ఊహించిన ధరను చూపించడం లేదు.</p>' +
+        '<p><strong>ధరను యాప్‌లోనే లైవ్‌గా చూపించడానికి అవసరమైనవి:</strong></p>' +
+        '<ul class="info-list"><li>అధికారిక మార్కెట్ ధర API లేదా అనుమతించబడిన డేటా మూలం</li><li>ఎంచుకున్న పంట, మార్కెట్ యార్డు, ధర తేదీ</li><li>కనిష్ఠ, గరిష్ఠ, మోడల్ ధర మరియు యూనిట్</li></ul>' +
+        '<p class="muted">ధర API లేదా సర్వర్ కనెక్ట్ చేసిన తర్వాత ఇతర వెబ్‌సైట్‌కు వెళ్లకుండా ఈ స్క్రీన్‌లోనే నిజమైన ధరలు చూపవచ్చు.</p></div>';
+    }
+
+    function getCropGuidance() {
+      const crop = document.getElementById("doctorCrop").value;
+      const stage = document.getElementById("doctorStage").value;
+      const input = document.getElementById("cropProblem").value.trim();
+      const result = document.getElementById("doctorResult");
+      if (input.length < 8) {
+        result.innerHTML = '<div class="result error">పంట పేరు, లక్షణాలు, ఎప్పటి నుంచి సమస్య ఉందో కొంచెం వివరంగా రాయండి.</div>';
+        return;
+      }
+      const lower = input.toLowerCase();
+      let possible = "లక్షణాల ఆధారంగా ఖచ్చితమైన కారణాన్ని నిర్ధారించలేం. నీటి ఒత్తిడి, పోషక లోపం, పురుగు లేదా వ్యాధి వంటి అనేక కారణాలు ఉండవచ్చు.";
+      if (lower.includes("పసుపు") || lower.includes("yellow") || lower.includes("పచ్చగా లేదు")) {
+        possible = "ఆకులు పసుపు కావడానికి నీటి నిర్వహణ, పోషక లోపం, వేర్ల సమస్యలు లేదా కొన్ని వ్యాధులు కారణం కావచ్చు. ఒక్క లక్షణంతో కారణాన్ని నిర్ధారించలేం.";
+      } else if (lower.includes("మచ్చ") || lower.includes("spots") || lower.includes("మచ్చలు")) {
+        possible = "ఆకుల మచ్చలు శిలీంధ్ర/బ్యాక్టీరియా సమస్యలు, పురుగుల నష్టం లేదా వాతావరణ ఒత్తిడితో రావచ్చు. మచ్చల ఆకారం, వ్యాప్తి, పంట దశను నిపుణుడు పరిశీలించాలి.";
+      } else if (lower.includes("వాడి") || lower.includes("ఎండిప") || lower.includes("wilting")) {
+        possible = "మొక్క వాడిపోవడానికి నీటి కొరత, నీరు నిలిచిపోవడం, వేర్ల నష్టం లేదా విల్ట్ వంటి వ్యాధులు కారణం కావచ్చు. నేల తేమ, వేర్ల స్థితిని పరిశీలించాలి.";
+      } else if (lower.includes("పురుగు") || lower.includes("worm") || lower.includes("తిన") || lower.includes("కీటక")) {
+        possible = "పురుగు సమస్యను గుర్తించడానికి పురుగు, దాని దశ, ఆకులు/కాయలపై నష్టం పరిశీలించాలి. స్పష్టమైన గుర్తింపు లేకుండా పురుగుమందు పిచికారీ చేయవద్దు.";
+      }
+      result.innerHTML =
+        '<div class="result"><span class="pill">ప్రాథమిక మార్గదర్శకం</span>' +
+        '<p><strong>పంట:</strong> ' + escapeHTML(crop) + '</p><p><strong>పంట దశ:</strong> ' + escapeHTML(stage) + '</p>' +
+        '<p><strong>సంభవించే కారణాలు:</strong> ' + escapeHTML(possible) + '</p>' +
+        '<strong>ఇప్పుడే చేయగల సురక్షిత చర్యలు</strong><ul class="info-list">' +
+        '<li>సమస్య ఉన్న మొక్కలు, ఆరోగ్యంగా ఉన్న మొక్కలను పోల్చి చూడండి.</li>' +
+        '<li>నేల తేమ, నీరు నిల్వ, ఇటీవలి వర్షం/పిచికారీ/ఎరువుల వివరాలు నమోదు చేయండి.</li>' +
+        '<li>కొన్ని ప్రభావిత మొక్కల ఆకులు, కాండం, వేర్లు నిపుణుడికి చూపించండి.</li>' +
+        '<li>కారణం నిర్ధారణ అయ్యే వరకు మందులు కలపవద్దు; లేబుల్ లేని లేదా పంటకు అనుమతి లేని ఉత్పత్తులు వాడవద్దు.</li>' +
+        '</ul><p><strong>మీరు ఇచ్చిన వివరణ:</strong> ' + escapeHTML(input) + '</p>' +
+        '<p class="muted">ఈ యాప్‌లో నిజమైన AI లేదా ఫోటో ఆధారిత వ్యాధి నిర్ధారణ లేదు. ఖచ్చితమైన చికిత్స కోసం మండల వ్యవసాయ అధికారి / కృషి విజ్ఞాన కేంద్రాన్ని సంప్రదించండి.</p></div>';
+    }
+
+    function startVoice() {
+      const status = document.getElementById("voiceStatus");
+      const button = document.getElementById("voiceButton");
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        status.textContent = "మీ బ్రౌజర్‌లో వాయిస్ గుర్తింపు అందుబాటులో లేదు. Chromeలో ప్రయత్నించండి లేదా మాటలను పై బాక్స్‌లో టైప్ చేయండి.";
+        return;
+      }
+      const recognition = new SpeechRecognition();
+      recognition.lang = "te-IN";
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      button.disabled = true;
+      status.textContent = "వింటున్నాం... ఇప్పుడు తెలుగులో మాట్లాడండి.";
+      recognition.onresult = function(event) {
+        const spoken = event.results && event.results[0] && event.results[0][0] ? event.results[0][0].transcript : "";
+        document.getElementById("voiceText").value = spoken;
+        status.textContent = spoken ? "మీ మాటలు టెక్స్ట్‌గా మార్చబడ్డాయి." : "మాటలు గుర్తించలేకపోయాం. మళ్లీ ప్రయత్నించండి.";
+      };
+      recognition.onerror = function(event) {
+        status.textContent = "వాయిస్ గుర్తింపు పని చేయలేదు (" + (event.error || "తెలియని సమస్య") + "). మైక్రోఫోన్ అనుమతి, ఇంటర్నెట్‌ను తనిఖీ చేయండి.";
+      };
+      recognition.onend = function() {
+        button.disabled = false;
+      };
+      try {
+        recognition.start();
+      } catch (error) {
+        button.disabled = false;
+        status.textContent = "వాయిస్ ప్రారంభించలేకపోయాం. మళ్లీ ప్రయత్నించండి.";
+      }
+    }
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, function(ch) {
+        return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch];
+      });
+    }
+  </script>
+</body>
+</html>
